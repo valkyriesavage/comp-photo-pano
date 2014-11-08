@@ -1,6 +1,6 @@
 HAWAII = false;
-ROSE_GARDEN = false;
-MUNICH = true;
+ROSE_GARDEN = true;
+MUNICH = false;
 
 % load images
 

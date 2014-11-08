@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <title>Valkyrie Savage Project 7</title>
+  </head>
+  <body>
+    <h1>Mosaic stitching</h1>
+    <h3>Valkyrie Savage</h3>
+    <h2>introduction</h2>
+    The big idea of this project is taking a collection of photos captured from the same viewpoint and stitching them together into a larger photo mosaic.  In part 1, this is accomplished by matching user-selected points in both images.  In part 2, points and correspondences are algorithmically automatically determined.  The images are made to match by determining a homography (8DOF warp) between these correspondence points using least-squares error minimization.<br/>
+    <h2>rectification</h2>
+    A smaller step on the way to mosaic images, image rectification is taking an image with a known rectangular object in it, selecting its corners, and warping that object to be a rectangle.  For whatever reason, Matlab's least squares solver doesn't work very hard on these rectangles: when the transformation is performed with just 3 points, they make a beautiful right angle, but when a 4th point is added it's total madness.<br/>
+
+    <table>
+      <tr><td width=33%><b>Source image</b></td><td width=33%><b>Rectified image - 3 corners</b></td><td><b>Rectified images - 4 corners</b></td></tr>
+      <tr><td><img src="samples/april-shadow.png" width=100%></td><td><img src="3cornerpuppies.jpg" width=100%/></td><td><img src="4cornerpuppies.jpg" width=100%/></td></tr>
+      <tr><td><img src="samples/yesond.jpg" width=100%></td><td><img src="3cornersoda.jpg" width=100%/></td><td><img src="4cornersoda.jpg" width=100%/></td></tr>
+    </table>
+
+    <h2>mosaics</h2>
+    The real meat and potatoes of this assignment, of course, is the full-on image warping.  All of my image warps used around 15 correspondence points between each pair of neighboring pictures (and all are composed of 3 images).  The way I "blended" the images was by feathering all their edges prior to warping and summing based on alpha values to get the final artifact.<br/>
+    
+    <table>
+      <tr><td width=20%><b>Title/story</b></td><td width=40%><b>Source images</b></td><td width=40%><b>Mosaic</b></td></tr>
+      <tr><td>These images of the Berkeley rose garden come from just around the corner of my house.  Amusingly, Google seems to have implemented one of the bells and whistles from part 2 and very helpfully offered an "auto-awesome" photo of these images as a pre-stitched panorama.  Thanks, Google!</td><td><img src="samples/rose1-1.jpg" width=30%><img src="samples/rose1-2.jpg" width=30%/><img src="samples/rose1-3.jpg" width=30%/></td><td><img src="pano-rosegarden.jpg" width=100%/></td></tr>
+      <tr><td>These images, taken on Oahu when I was there recently for a conference, surprised me a little when they worked.  I knew that we had a panorama assignment coming up, so I snapped several photos, but this was before I knew about the hard constraint of taking photos from the same spot.  Still, they worked out well (aside from the exposures...).</td><td><img src="samples/hawaii-0-left.jpg" width=30%><img src="samples/hawaii-1-leftcenter.jpg" width=30%/><img src="samples/hawaii-2-rightcenter.jpg" width=30%/></td><td><img src="pano-hawaii.jpg" width=100%/></td></tr>
+      <tr><td>These images, of Munich international airport, were clipped from a video I apparently randomly decided to take of the airport when I flew through in July.  I stood in one spot in front of the terminal and spun around, and to build this mosaic I just screenshotted a few frames nearby each other.  The billboard top doesn't match up extremely well (not rectified), I think because I had a challenging time finding any keypoints along that part of the image to force alignment on.</td><td><img src="samples/munich-0.png" width=30%><img src="samples/munich-1.png" width=30%/><img src="samples/munich-2.png" width=30%/></td><td><img src="pano-munich.jpg" width=100%/></td></tr>
+    </table>
+
+  </body>
+</html>

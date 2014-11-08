@@ -1,0 +1,15 @@
+Code contained in this folder:
+
+alphanate.m - this adds a 4th channel (alpha) to the image: it's just feathered around each edge.
+
+computeH.m - takes two matrices of points, a source set and a destination set, and computes a homography that will warp between them
+
+main.m - a scripty piece with a bunch of variables that will run the various parts of the assignment
+
+refine.m - given a cpstruct (as comes out of cpselect) and the two related images, refine.m will search through patches around the images to ensure that they are really representative of the same point.
+
+shiftImage.m - given an image and a shift, it returns a new image with that image as a subpiece, shifted by the desired amounts from the edges
+
+stitchImages.m - takes 3 images and stitches them together into a single image, overlaying and summing alpha channels
+
+warpImage.m - given an image and a homography, it warps the image by that matrix and returns it.  also returns the x and y shifts necessary to place the image correctly post-warp.

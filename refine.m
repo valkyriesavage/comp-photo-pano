@@ -5,7 +5,7 @@ function refined = refine(cpstruct,baseimg,inputimg)
         % b) do edge detection and compare
         % c) compare in gradient space
         % a is simplest to implement so we'll start there
-        patchsize = 8;
+        patchsize = 5;
         inputpatch = inputimg(inputpt(2)-patchsize:inputpt(2)+patchsize,inputpt(1)-patchsize:inputpt(1)+patchsize,:);
         basepatch = baseimg(basept(2)-patchsize:basept(2)+patchsize,basept(1)-patchsize:basept(1)+patchsize,:);
         score = sum(sum(sum(abs(inputpatch-basepatch))));

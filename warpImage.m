@@ -25,8 +25,8 @@ function [warped,xshift,yshift] = warpImage(image, H)
     [Y,X] = ndgrid(1+yshift:tsizey+yshift,1+xshift:tsizex+xshift);
     Y = Y(:);X = X(:);Z = ones(size(Y));
     querypts = [X,Y,Z]*H^-1;
-    Xq = querypts(:,1);
-    Yq = querypts(:,2);
+    Xq = querypts(:,1)./querypts(:,3);
+    Yq = querypts(:,2)./querypts(:,3);
     
     red_warped = interp2(image(:,:,1),Xq,Yq);
     red_warped = reshape(red_warped,tsizey,tsizex);
@@ -38,6 +38,7 @@ function [warped,xshift,yshift] = warpImage(image, H)
     grn_warped = reshape(grn_warped,tsizey,tsizex);
     
     alpha_warped = interp2(image(:,:,4),Xq,Yq);
+    alpha_warped(isnan(alpha_warped)) = 0;
     alpha_warped = reshape(alpha_warped,tsizey,tsizex);
     
     warped = cat(3,red_warped,blu_warped,grn_warped,alpha_warped);

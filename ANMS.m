@@ -5,22 +5,22 @@ function points = ANMS(x,y,v,numpts)
     
     % ok, we start by finding a list of radii for which each point will be
     % included in our final set of points.
-    rads = [];
+    rads = zeros(size(v));
     c_robust = 0.9;
     cd_v = c_robust*v;
     D = pdist(pts,'euclidean');
     D = squareform(D);
     for i = [1:size(pts,1)]
         dists_i = D(i,:);
-        strong_enoughs = ones(size(cd_v))*999;
+        strong_enoughs = ones(size(cd_v))*9999;
         strong_enoughs((cd_v - v(i)) > 0) = dists_i((cd_v - v(i)) > 0);
         [M,~] = min(strong_enoughs);
         rads(i) = M;
     end
     
     % then we find the radius that gives us numpts points
-    for rad = sort(rads,'descend')
-        if(size(rads(rads>rad),2) >= numpts)
+    for rad = sort(rads,'descend').'
+        if(any(size(rads(rads>rad)) >= numpts))
             break;
         end
     end

@@ -5,6 +5,8 @@ MUNICH = false;
 USER = false;
 AUTO = true;
 
+CALCULATE = false;
+
 % load images
 
 if HAWAII
@@ -29,9 +31,9 @@ if MUNICH
 
 end
 
-% load homography point pairs
-
 if USER
+    % load user-defined homography point pairs
+    
     if HAWAII
         load 'cps-hawaii.mat'
     end
@@ -48,25 +50,41 @@ if USER
     oneto2 = refine(oneto2,im1,im2);
 end
 if AUTO
-    [ohx,ohy,ohv] = harris(im0);
-    [onex,oney,onev] = harris(im1);
-    [twox,twoy,twov] = harris(im2);
+    if CALCULATE
+        % collect harris corners
+        [ohx,ohy,ohv] = harris(im0);
+        [onex,oney,onev] = harris(im1);
+        [twox,twoy,twov] = harris(im2);
+
+        % adaptive non-maximal suppression for fewer points
+        numpts = 500;
+        ohpts = ANMS(ohx,ohy,ohv,numpts);
+        onepts = ANMS(onex,oney,onev,numpts);
+        twopts = ANMS(twox,twoy,twov,numpts);
+
+        % visualize one
+        imagesc(im0);
+        colormap(gray);
+        hold on;
+        plot(ohpts(:,1),ohpts(:,2),'r.');
+        hold off;
+
+        % structure correctly
+        ohto1 = struct;
+        oneto2 = struct;
+        ohto1.inputPoints = ohpts;
+        ohto1.basePoints = onepts;
+        oneto2.inputPoints = onepts;
+        oneto2.basePoints = twopts;
+    else
+        load('hawaii-auto.mat');
+    end
     
-    numpts = 500;
-    ohpts = ANMS(ohx,ohy,ohv,numpts);
-    onepts = ANMS(onex,oney,onev,numpts);
-    twopts = ANMS(twox,twoy,twov,numpts);
+    % get correspondences
+    ohto1 = russianGranny(ohto1,im0,im1);
+    oneto2 = russianGranny(oneto2,im1,im2);
     
-    ohto1 = struct;
-    oneto2 = struct;
-    ohto1.inputPoints = ohpts;
-    ohto1.basePoints = onepts;
-    oneto2.basePoints = twopts;
-    oneto2.inputPoints = onepts;
-    
-    ohto1 = russianGranny(ohto1);
-    oneto2 = russianGranny(oneto2);
-    
+    % RANSAC that shit.  which points make a good homography?
     ohto1 = RANSAC(ohto1);
     oneto2 = RANSAC(oneto2);
 end

@@ -19,8 +19,8 @@ R = (Ix2.*Iy2 - IxIy.*IxIy) ... % det(H)
     ./ (Ix2 + Iy2 + eps);       % trace(H) + epsilon
 
 % don't want corners close to image border
-R([1:15, end-16:end], :) = 0;
-R(:,[1:15,end-16:end]) = 0;
+R([1:20, end-21:end], :) = 0;
+R(:,[1:20,end-21:end]) = 0;
 
 % non-maxima supression within 3x3 windows
 nonmax = inline('max(x)');
@@ -31,10 +31,10 @@ Rnm = R.*(R == Rmax);  % supress non-max
 [y,x,v] = find(Rnm);
 
 % show 'em
-imagesc(im);
-colormap(gray);
-hold on;
-plot(x,y,'r.');
-hold off;
+% imagesc(im);
+% colormap(gray);
+% hold on;
+% plot(x,y,'r.');
+% hold off;
 
 end

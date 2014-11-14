@@ -9,5 +9,4 @@ function H = computeH(pts1, pts2)
     
     % then, we know that bigger1*H = bigger2
     H = bigger1\bigger2;
-    %H = H.';
 end

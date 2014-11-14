@@ -11,9 +11,13 @@ function [warped,xshift,yshift] = warpImage(image, H)
     
     % warp those corners
     ulw = upperleft*H;
+    ulw = ulw/ulw(3);
     urw = upperright*H;
+    urw = urw/urw(3);
     llw = lowerleft*H;
+    llw = llw/llw(3);
     lrw = lowerright*H;
+    lrw = lrw/lrw(3);
     
     % get corners
     tsizey = ceil(max(llw(2),lrw(2)) - min(ulw(2),urw(2)));

@@ -85,8 +85,8 @@ if AUTO
     oneto2 = russianGranny(oneto2,im1,im2);
     
     % RANSAC that shit.  which points make a good homography?
-    ohto1 = RANSAC(ohto1);
-    oneto2 = RANSAC(oneto2);
+    [g01, ohto1] = RANSAC(ohto1);
+    [g12, oneto2] = RANSAC(oneto2);
 end
 
 

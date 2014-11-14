@@ -8,5 +8,7 @@ function H = computeH(pts1, pts2)
     bigger2(:,1:2) = pts2;
     
     % then, we know that bigger1*H = bigger2
+    % If A is a square n-by-n matrix and B is a matrix with n rows,
+    % then x = A\B is a solution to the equation A*x = B, if it exists.
     H = bigger1\bigger2;
 end

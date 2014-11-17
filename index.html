@@ -27,5 +27,31 @@
       <tr><td>These images, of Munich international airport, were clipped from a video I apparently randomly decided to take of the airport when I flew through in July.  I stood in one spot in front of the terminal and spun around, and to build this mosaic I just screenshotted a few frames nearby each other.  The billboard top doesn't match up extremely well (not rectified), I think because I had a challenging time finding any keypoints along that part of the image to force alignment on.</td><td><img src="samples/munich-0.png" width=30%><img src="samples/munich-1.png" width=30%/><img src="samples/munich-2.png" width=30%/></td><td><img src="pano-munich.jpg" width=100%/></td></tr>
     </table>
 
+    <h2>introduction: part 2</h2>
+    But, really, how annoying is it to click a bunch of places?  Aren't computers smart enough to figure out correspondences for themselves?  None of these datasets is particularly challenging (they are all pretty clean).  So... algorithms to the rescue!  I, for one, welcome our new robot overlords.<br/>
+    <h2>point generation</h2>
+    Points are generated automatically using a lovely Harris corner finder developed by our own Alyosha Efros.  This algorithm reacts to things that look like "corners"; i.e., things that have strongish gradients in both x and y directions.<br/>
+    <img src="puppies-harris.jpg" /><br/>
+    However, there are a LOT of points there.  To be a bit clever about it, we want to lessen the number of points but keep the distribution pretty nice.  Enter Adaptive Non-Maximal Suppression!<br/>
+    <img src="puppies-ANMS.jpg"/><br/>
+    The general idea of ANMS is to use the "strength" of each corner to hide weaker corners within a radius (iteratively).  We just have to determine what suppression radius is good and gets us the number of corners we want.<br/>
+    <h2>point matching</h2>
+    The "Russian Granny" algorithm presented in class states that if a point doesn't have a clear match, far better than all the rest, then it should remain unmatched.  This is related to a young Russian who should not get married unless one of their choices is clearly better than the rest.<br/>The functional part of this is that 40x40 patches around each control point are extracted from the image, then they are normalized (subtract mean value of patch, divide by variance of patch), and re-sized to 8x8 pixels.<br/>
+    <table>
+      <tr><td width=50%><img src="russiangranny.png"></td><td width=50%><img src="russiangranny1.png"></td></tr>
+    </table>
+    <br/>
+    The descriptors above were matched by the Russian Granny.
+    <h2>homography identification</h2>
+    Still, though, some grannies are fallible.  They can give bad advice!  Using points that contain bad advice to generate a homography can wind up with some very sketchy homographies.  Therefore we do one more thing before we follow the processing pipeline above: we RANSAC that $#!+.<br/>
+    The RANSAC algorithm takes a collection of matched points and calculates a homography for every set of 4 points in that collection.  For each homography, it warps the points to see how they do.  With each warping, we count the number of inliers vs. outliers in our point set (an inlier is defined as being within 3 pixels of where its match is after warping).  We then choose the homography with the most inliers.<br/>
+    From here, we can run the algorithm as normal from above.  My images were so similar to the ones from the hand-done output that I don't include them here (although they can be rendered using my code).<br/>
+    <h2>bells & whistles</h2>
+    I collected my panorama data for this assignment using my Android phone.  As Alyosha mentioned in class, Google does this nice thing for you:<br/>
+    <img src="google-auto-pano.png" width=100%/><br/>
+    It discovered that I had taken photos "over a wide area" and helpfully stitched them together into a panorama for me.  I can tell you, this was rather demotivational from the perspective of finishing the first assignment.<br/>
+    However, this is not too difficult to accomplish.  Given a collection of images, they can be run pair-wise through the automatic steps above and panoramas can pop out!  The two thresholds that I use for my rejection are if the Russian Granny declares that <10 points match between the two images and if RANSAC says that <50% of the points in its best homography are inliers.<br/>
+    <img src="discovered-pano.jpg" width=100%/><br/>
+    An automatically discovered panorama.
   </body>
 </html>

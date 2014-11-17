@@ -6,10 +6,16 @@ computeH.m - takes two matrices of points, a source set and a destination set, a
 
 main.m - a scripty piece with a bunch of variables that will run the various parts of the assignment
 
+RANSAC.m - as described, given two sets of points, calculate homographies between each set of 4 points and count outliers and inliers for each.  return the set of 4 points that make the best homography.
+
 refine.m - given a cpstruct (as comes out of cpselect) and the two related images, refine.m will search through patches around the images to ensure that they are really representative of the same point.
+
+russianGranny.m - as described, take two images and a collection of points in each, then turn patches around those points into descriptors and see which ones match up.  if there is no clear match winner, no match is declared.
 
 shiftImage.m - given an image and a shift, it returns a new image with that image as a subpiece, shifted by the desired amounts from the edges
 
 stitchImages.m - takes 3 images and stitches them together into a single image, overlaying and summing alpha channels
+
+stripfname.m - given a filename, take out everything like '-' and '.' that makes it invalid as a variable name (I used dynamic variable names to build a structure in the panorama search and build bell/whistle)
 
 warpImage.m - given an image and a homography, it warps the image by that matrix and returns it.  also returns the x and y shifts necessary to place the image correctly post-warp.

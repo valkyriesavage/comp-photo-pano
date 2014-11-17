@@ -1,15 +1,15 @@
 USER = false; % use user-defined control points
 AUTO = true; % run auto-generation of control points
+AUTO_RECOGNIZE = false; % true: find panos, false: load pre-defined images
 
-CALCULATE = true; % false skips harris and ANMS, loads pre-calculated
+CALCULATE = true; % false: skip harris, ANMS, & load pre-calc (faster)
 
-RECOGNIZE = true; % true: find images that match, false: load images
 % three datasets of 3 images each
 HAWAII = true;
 ROSE_GARDEN = false;
 MUNICH = false;
 
-if RECOGNIZE
+if AUTO_RECOGNIZE
     fnames = strsplit(ls('panosearch/'));
     pointses = struct;
     

@@ -56,5 +56,6 @@ function [good, bettered_cpstruct] = RANSAC(cpstruct)
     bettered_cpstruct.inputPoints = cpstruct.inputPoints(bestidxes,:);
     bettered_cpstruct.basePoints = cpstruct.basePoints(bestidxes,:);
     
-    good = (mostInliers/size(cpstruct.inputPoints,1) > .75);
+    % good if > 50% of russian granny correspondences are inliers
+    good = (mostInliers/size(cpstruct.inputPoints,1) > .50);
 end
